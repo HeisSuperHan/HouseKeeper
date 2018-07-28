@@ -1,0 +1,379 @@
+GET http://localhost:5000/user
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T103542.500.html
+
+###
+
+GET http://localhost:5000/user?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T103453.500.html
+
+###
+
+GET http://localhost:5000/user
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T103355.500.html
+
+###
+
+GET http://localhost:5000/user
+Accept: */*
+Cache-Control: no-cache
+Cookies: user_cookies=2ceec761e05b7b31d4de0ea60b376f7d
+
+<> 2018-07-27T102800.500.html
+
+###
+
+GET http://localhost:5000/user
+Accept: */*
+Cache-Control: no-cache
+Cookies: user_cookies="2ceec761e05b7b31d4de0ea60b376f7d"
+
+<> 2018-07-27T102738.500.html
+
+###
+
+GET http://localhost:5000/user?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+Cookies: user_cookies="2ceec761e05b7b31d4de0ea60b376f7d"
+
+<> 2018-07-27T102708.500.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T102213.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T102151.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T102141.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T102115.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T102114-3.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T102114-2.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T102114-1.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T102114.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T102113.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T102112.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T102046.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T095404.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T095228.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T095220-2.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T095220-1.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T095220.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T095219.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T095218.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1@qq.com&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T095203.200.html
+
+###
+
+POST http://localhost:5000/admin/login?username=admin1&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T095107.200.html
+
+###
+
+GET http://localhost:5000/admin/login?username=admin1&password=admin1
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T095102.405.html
+
+###
+
+GET http://localhost:5000/user
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T094957.500.html
+
+###
+
+GET http://localhost:5000/user
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T094935.500.html
+
+###
+
+GET http://localhost:5000/user
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T094834-1.200.html
+
+###
+
+GET http://localhost:5000/user
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T094834.200.html
+
+###
+
+GET http://localhost:5000/user
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T094831.200.html
+
+###
+
+GET http://localhost:5000/user
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T094752.200.html
+
+###
+
+GET http://localhost:5000/user
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T094701.500.html
+
+###
+
+GET http://localhost:5000/user
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T094621.500.html
+
+###
+
+GET http://localhost:5000/user
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T094444.500.html
+
+###
+
+GET http://localhost:5000/user
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T094205.500.html
+
+###
+
+GET http://localhost:5000/user
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T094140.500.html
+
+###
+
+GET http://localhost:5000/user
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T094123.500.html
+
+###
+
+POST http://localhost:5000/user
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T094119.405.html
+
+###
+
+POST http://localhost:5000/login?username=test1@qq.com&password=test1password
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T093410.200.html
+
+###
+
+POST http://localhost:5000/login?username=test1@qq.com&password=test1password
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T093134.200.html
+
+###
+
+POST http://localhost:5000/login?username=test1@qq.com&password=test1password
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T093006.200.html
+
+###
+
+POST http://localhost:5000/login?username=test1@qq.com&password=test1password
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T092947.200.html
+
+###
+
+POST http://localhost:5000/login?username=test1@qq.com&password=test1password
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T091754.200.html
+
+###
+
+POST http://localhost:5000/login?username=test1@qq.com&password=test1password
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T091234.500.html
+
+###
+
+POST http://localhost:5000/register?username=test1@qq.com&password=test1password&repeate=test1password
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-07-27T091132.200.html
+
+###
+
