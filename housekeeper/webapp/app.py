@@ -33,11 +33,17 @@ def register():
         task_db = db()
         result = task_db.insert_user(username,password,registertime,user_uuid,cookies,token)
         if result['status'] == 0:
-            return json.dumps({'status': 0, 'data': {'username': username}})
+            rtp = make_response(json.dumps({'status': 0, 'data': {'username': username}}))
+            rtp.headers['Access-Control-Allow-Origin'] = '*'
+            return rtp
         else:
-            return json.dumps({'status':-1,'errmsg':'insert database failed'})
+            rtp = make_response(json.dumps({'status':-1,'errmsg':'insert database failed'}))
+            rtp.headers['Access-Control-Allow-Origin'] = '*'
+            return rtp
     else:
-        return json.dumps({'status':-1,'errmsg':'error input data'})
+        rtp = make_response(json.dumps({'status':-1,'errmsg':'error input data'}))
+        rtp.headers['Access-Control-Allow-Origin'] = '*'
+        return rtp
 
 
 @app.route('/login',methods=['POST'])
@@ -54,15 +60,25 @@ def login():
             if result['data']:
                 get_authtoken = task_db.select_user_authtoken(username)
                 if get_authtoken['status'] == 0 and get_authtoken['data']:
-                    return json.dumps({'status':0,'data':{'username':username,'cookies':get_authtoken['data']['cookies'],'token':get_authtoken['data']['token']}})
+                    rtp = make_response(json.dumps({'status':0,'data':{'username':username,'cookies':get_authtoken['data']['cookies'],'token':get_authtoken['data']['token']}}))
+                    rtp.headers['Access-Control-Allow-Origin'] = '*'
+                    return rtp
                 else:
-                    return json.dumps({'status':-1,'errmsg':'get authtoken failed'})
+                    rtp = make_response(json.dumps({'status':-1,'errmsg':'get authtoken failed'}))
+                    rtp.headers['Access-Control-Allow-Origin'] = '*'
+                    return rtp
             else:
-                return json.dumps({'status':-1,'errmsg':'error username or password'})
+                rtp = make_response(json.dumps({'status':-1,'errmsg':'error username or password'}))
+                rtp.headers['Access-Control-Allow-Origin'] = '*'
+                return rtp
         else:
-            return json.dumps({'status':-1,'errmsg':'select database failed'})
+            rtp = make_response(json.dumps({'status':-1,'errmsg':'select database failed'}))
+            rtp.headers['Access-Control-Allow-Origin'] = '*'
+            return rtp
     else:
-        return json.dumps({'status': -1, 'errmsg': 'error input data'})
+        rtp = make_response(json.dumps({'status': -1, 'errmsg': 'error input data'}))
+        rtp.headers['Access-Control-Allow-Origin'] = '*'
+        return rtp
 
 
 @app.route('/user',methods=['GET'])
@@ -77,11 +93,17 @@ def user():
         username = result_1['data']
         result_2 = task_db.select_miners_from_username(username)
         if result_2['status'] == 0:
-            return json.dumps({'status':0,'miners_number':result_2['miners_number'],'data':result_2['data']})
+            rtp = make_response(json.dumps({'status':0,'miners_number':result_2['miners_number'],'data':result_2['data']}))
+            rtp.headers['Access-Control-Allow-Origin'] = '*'
+            return rtp
         else:
-            return json.dumps({'status':0,'data':0})
+            rtp = make_response(json.dumps({'status':0,'data':0}))
+            rtp.headers['Access-Control-Allow-Origin'] = '*'
+            return rtp
     else:
-        return json.dumps({'status': -1, 'errmsg': 'db error'})
+        rtp = make_response(json.dumps({'status': -1, 'errmsg': 'db error'}))
+        rtp.headers['Access-Control-Allow-Origin'] = '*'
+        return rtp
 
 
 
@@ -100,16 +122,26 @@ def miner():
                 miner_data = {'data':json.loads(miner_data),'info':json.loads(miner_info)}
                 result = task_db.insert_miner_data(miner_id,owner,miner_data)
                 if result['status'] == 0:
-                    return json.dumps({'status':0,'data':'insert finished'})
+                    rtp = make_response(json.dumps({'status':0,'data':'insert finished'}))
+                    rtp.headers['Access-Control-Allow-Origin'] = '*'
+                    return rtp
                 else:
-                    return json.dumps({'status': -1, 'errmsg': 'db insert miner failed'})
+                    rtp = make_response(json.dumps({'status': -1, 'errmsg': 'db insert miner failed'}))
+                    rtp.headers['Access-Control-Allow-Origin'] = '*'
+                    return rtp
             except Exception as e:
                 logger('json miner data', str(e))
-                return json.dumps({'status': -1, 'errmsg': str(e)})
+                rtp = make_response(json.dumps({'status': -1, 'errmsg': str(e)}))
+                rtp.headers['Access-Control-Allow-Origin'] = '*'
+                return rtp
         else:
-            return json.dumps({'status': -1, 'errmsg': 'this user not exist'})
+            rtp = make_response(json.dumps({'status': -1, 'errmsg': 'this user not exist'}))
+            rtp.headers['Access-Control-Allow-Origin'] = '*'
+            return rtp
     else:
-        return json.dumps({'status': -1, 'errmsg': 'db error'})
+        rtp = make_response(json.dumps({'status': -1, 'errmsg': 'db error'}))
+        rtp.headers['Access-Control-Allow-Origin'] = '*'
+        return rtp
 
 
 
@@ -125,13 +157,21 @@ def admin_login():
             if result['data']:
                 get_authtoken = task_db.select_admin_authtoken(username)
                 if get_authtoken['status'] == 0 and get_authtoken['data']:
-                    return json.dumps({'status': 0,'data': {'username': username, 'cookies': get_authtoken['data']['cookies'],'token': get_authtoken['data']['token']}})
+                    rtp = make_response(json.dumps({'status': 0,'data': {'username': username, 'cookies': get_authtoken['data']['cookies'],'token': get_authtoken['data']['token']}}))
+                    rtp.headers['Access-Control-Allow-Origin'] = '*'
+                    return rtp
                 else:
-                    return json.dumps({'status': -1, 'errmsg': 'get authtoken failed'})
+                    rtp = make_response(json.dumps({'status': -1, 'errmsg': 'get authtoken failed'}))
+                    rtp.headers['Access-Control-Allow-Origin'] = '*'
+                    return rtp
         else:
-            return json.dumps({'status':-1,'errmsg':'select database failed'})
+            rtp = make_response(json.dumps({'status':-1,'errmsg':'select database failed'}))
+            rtp.headers['Access-Control-Allow-Origin'] = '*'
+            return rtp
     else:
-        return json.dumps({'status': -1, 'errmsg': 'error input data'})
+        rtp = make_response(json.dumps({'status': -1, 'errmsg': 'error input data'}))
+        rtp.headers['Access-Control-Allow-Origin'] = '*'
+        return rtp
 
 
 
@@ -149,11 +189,17 @@ def admin():
                 result_3[x[1]] = []
             for y in result_2['data']:
                 result_3[y[1]].append({y[0]:y[2]})
-            return json.dumps({'status':0,'data':result_3})
+            rtp = make_response(json.dumps({'status':0,'user_number':users_number,'miners_number':miners_number,'data':result_3}))
+            rtp.headers['Access-Control-Allow-Origin'] = '*'
+            return rtp
         else:
-            return json.dumps({'status': -1, 'errmsg': 'error db result 2'})
+            rtp = make_response(json.dumps({'status': -1, 'errmsg': 'error db result 2'}))
+            rtp.headers['Access-Control-Allow-Origin'] = '*'
+            return rtp
     else:
-        return json.dumps({'status': -1, 'errmsg': 'error db result 1'})
+        rtp = make_response(json.dumps({'status': -1, 'errmsg': 'error db result 1'}))
+        rtp.headers['Access-Control-Allow-Origin'] = '*'
+        return rtp
 
 
 
