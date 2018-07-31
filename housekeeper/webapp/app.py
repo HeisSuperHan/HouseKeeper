@@ -1,5 +1,5 @@
 
-from flask import Flask,request,make_response
+from flask import Flask,request,make_response,render_template
 from safe.login_reg_detect import safelogin,saferegister
 from authtoken.auth import auth
 from db_manger import db
@@ -13,11 +13,11 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    pass
+    return render_template('index.html')
 
 
 
-@app.route('/register',methods=['POST'])
+@app.route('/api/register',methods=['POST'])
 def register():
     '''
     注册完毕，前端应该转移到登陆页面
@@ -46,7 +46,7 @@ def register():
         return rtp
 
 
-@app.route('/login',methods=['POST'])
+@app.route('/api/login',methods=['POST'])
 def login():
     '''
     登陆完毕，前端应该转移到Dashboard页面，api请求/user的相关信息
@@ -81,7 +81,7 @@ def login():
         return rtp
 
 
-@app.route('/user',methods=['GET'])
+@app.route('/api/user',methods=['GET'])
 def user():
     '''
     用户登陆完毕后，api会请求相关信息,矿机数据
@@ -107,7 +107,7 @@ def user():
 
 
 
-@app.route('/miner',methods=['POST'])
+@app.route('/api/miner',methods=['POST'])
 def miner():
     username = request.form['username']
     miner_data = request.form['data']
@@ -146,7 +146,7 @@ def miner():
 
 
 
-@app.route('/admin/login',methods=['POST'])
+@app.route('/api/admin/login',methods=['POST'])
 def admin_login():
     if safelogin(request):
         username = request.form['username']
@@ -175,7 +175,7 @@ def admin_login():
 
 
 
-@app.route('/admin',methods=['POST'])
+@app.route('/api/admin',methods=['POST'])
 def admin():
     task_db = db()
     result_1 = task_db.select_users_miners()
