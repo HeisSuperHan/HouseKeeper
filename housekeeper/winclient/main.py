@@ -34,11 +34,14 @@ def send_data(data):
     url = 'http://118.24.115.49:8888/api/miner'
     headers = {'Content-Type': 'application/json'}
     playload = json.dumps({'data':data})
+    logger('playload',playload)
     try:
         r = requests.post(url,headers=headers,data=playload,timeout=10)
         if r.status_code == 200:
+            logger('response content:',r.text)
             return {'status':0}
         else:
+            logger('response content:',r.text)
             return {'status':-1,'errmsg':r.status_code}
     except Exception as e:
         return {'status':-1,'errmsg':str(e)}
@@ -82,10 +85,10 @@ def main():
                 if task_send_data['status'] == 0:
                     time.sleep(10)
                 else:
-                    logger('error','send data failed')
+                    logger('error',task_send_data)
                     time.sleep(10)
             else:
-                logger('error','get data failed')
+                logger('error',task_get_data)
                 time.sleep(10)
     else:
         # 判断为未登记用户后要求输入邮箱号，并生成登记信息

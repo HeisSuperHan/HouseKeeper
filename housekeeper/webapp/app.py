@@ -109,51 +109,37 @@ def user():
 
 @app.route('/api/miner',methods=['POST'])
 def miner():
-    miner_data = json.loads(request.get_data())
-    owner = miner_data['owner']
-    miner_id = miner_data['miner_id']
-    now_miner_status = miner_data['miner_data']
+    miner_data = request.json
+    owner = miner_data['data']['owner']
+    miner_id = miner_data['data']['miner_id']
+    now_miner_status = miner_data['data']['miner_data']
     task_db = db()
-    user_exist = task_db.check_user_miner(owner)
+    user_exist = task_db.check_user_miner(owner)      # 确认是否有这个用户
     if user_exist['status'] == 0:
-        if user_exist['data']:
+        if user_exist['data']:          # 有这个用户
             try:
-                before_status = task_db.check_minerid_exist(miner_id)
-                if before_status['data']:
+                before_status = task_db.check_minerid_exist(miner_id)     # 检查是否有这个矿机id
+                if before_status['data']:        # 矿机已存在  更新矿机状态即可
                     for x in now_miner_status:
                         before_status[x] = now_miner_status[x]
                     result = task_db.update_miner_status(miner_id,before_status)
                     if result['status'] == 0:
-                        rtp = make_response(json.dumps({'status':0,'data':'insert finished'}))
-                        rtp.headers['Access-Control-Allow-Origin'] = '*'
-                        return rtp
+                        return json.dumps({'status':0,'data':'insert finished'})
                     else:
-                        rtp = make_response(json.dumps({'status': -1, 'errmsg': 'db insert miner failed'}))
-                        rtp.headers['Access-Control-Allow-Origin'] = '*'
-                        return rtp
-                else:
-                    result = task_db.insert_miner_data(miner_id, owner, miner_data)
+                        return json.dumps({'status': -1, 'errmsg': 'db insert miner failed'})
+                else:                            # 矿机id不存在，新矿机，插入第一次矿机数据
+                    result = task_db.insert_miner_data(miner_id, owner, now_miner_status)
                     if result['status'] == 0:
-                        rtp = make_response(json.dumps({'status': 0, 'data': 'insert finished'}))
-                        rtp.headers['Access-Control-Allow-Origin'] = '*'
-                        return rtp
+                        return json.dumps({'status': 0, 'data': 'insert finished'})
                     else:
-                        rtp = make_response(json.dumps({'status': -1, 'errmsg': 'db insert miner failed'}))
-                        rtp.headers['Access-Control-Allow-Origin'] = '*'
-                        return rtp
+                        return json.dumps({'status': -1, 'errmsg': 'db insert miner failed'})
             except Exception as e:
                 logger('json miner data', str(e))
-                rtp = make_response(json.dumps({'status': -1, 'errmsg': str(e)}))
-                rtp.headers['Access-Control-Allow-Origin'] = '*'
-                return rtp
+                return json.dumps({'status': -1, 'errmsg': str(e)})
         else:
-            rtp = make_response(json.dumps({'status': -1, 'errmsg': 'this user not exist'}))
-            rtp.headers['Access-Control-Allow-Origin'] = '*'
-            return rtp
+            return json.dumps({'status': -1, 'errmsg': 'this user not exist'})
     else:
-        rtp = make_response(json.dumps({'status': -1, 'errmsg': 'db error'}))
-        rtp.headers['Access-Control-Allow-Origin'] = '*'
-        return rtp
+        return json.dumps({'status': -1, 'errmsg': 'db error'})
 
 
 

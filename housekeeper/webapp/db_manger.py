@@ -16,6 +16,9 @@ class db(object):
         self.conn.close()
 
     def insert_user(self,username,password,registertime,user_uuid,cookies,token):
+        '''
+        用户注册，插入新用户数据
+        '''
         try:
             sql = 'insert into account values(?,?,?,?,?,?)'
             self.cursor.execute(sql,(username,password,registertime,user_uuid,cookies,token))
@@ -27,6 +30,9 @@ class db(object):
             return {'status':-1,'errmsg':str(e)}
 
     def auth_username_password(self,username,password):
+        '''
+        验证用户登陆
+        '''
         try:
             sql = 'select password from account where username=?'
             a = self.cursor.execute(sql,(username,))
@@ -40,6 +46,9 @@ class db(object):
             return {'status': -1, 'errmsg': str(e)}
 
     def select_user_authtoken(self,username):
+        '''
+        根据用户名，查找用户的cookies和token
+        '''
         try:
             sql = 'select cookies,token from account where username=?'
             a = self.cursor.execute(sql,(username,))
@@ -56,6 +65,9 @@ class db(object):
 
 
     def select_username_from_cookies(self,cookies):
+        '''
+        根据cookies，查找用户名，判别用户
+        '''
         sql = 'select username from account where cookies=?'
         try:
             a = self.cursor.execute(sql,(cookies,))
@@ -69,6 +81,9 @@ class db(object):
             return {'status': -1, 'errmsg': str(e)}
 
     def select_miners_from_username(self,username):
+        '''
+        根据用户名查询这名用户下有哪些矿机数据
+        '''
         sql = 'select * from miners where owner=?'
         try:
             a = self.cursor.execute(sql, (username,))
@@ -120,6 +135,9 @@ class db(object):
 
 
     def insert_miner_data(self,miner_id,owner,miner_data):
+        '''
+        当用户新添加一台矿机的时候，插入新的矿机及数据
+        '''
         sql = 'insert into miners values(?,?,?)'
         try:
             self.cursor.execute(sql,(miner_id,owner,miner_data))
@@ -131,6 +149,9 @@ class db(object):
             return {'status':-1,'errmsg':str(e)}
 
     def update_miner_status(self,miner_id,status):
+        '''
+        根据矿机Miner_id更新添加矿机状态数据
+        '''
         sql = 'update miners set status=? where miner_id=?'
         try:
             self.cursor.execute(sql,(miner_id,status))
@@ -141,6 +162,9 @@ class db(object):
             return {'status': -1, 'errmsg': str(e)}
 
     def select_status_from_miner_id(self,miner_id):
+        '''
+        根据Miner_id查找矿机状态数据
+        '''
         sql = 'select miner_data from miners where miner_id=?'
         try:
             a = self.cursor.execute(sql,(miner_id,))
@@ -154,6 +178,9 @@ class db(object):
 
     # admin
     def auth_admin(self,username,password):
+        '''
+        验证管理员登陆
+        '''
         try:
             sql = 'select password from admin where username=?'
             a = self.cursor.execute(sql,(username,))
@@ -167,6 +194,9 @@ class db(object):
             return {'status': -1, 'errmsg': str(e)}
 
     def select_admin_authtoken(self,username):
+        '''
+        查找管理员的cookies和token
+        '''
         try:
             sql = 'select cookies,token from admin where username=?'
             a = self.cursor.execute(sql,(username,))
@@ -183,6 +213,9 @@ class db(object):
 
 
     def auth_admin_cookies(self,cookies):
+        '''
+        验证管理员cookies
+        '''
         try:
             sql = 'select * from admin where cookies=?'
             a = self.cursor.execute(sql,(cookies,))
