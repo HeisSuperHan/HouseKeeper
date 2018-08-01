@@ -52,34 +52,35 @@ def login():
     '''
     登陆完毕，前端应该转移到Dashboard页面，api请求/user的相关信息
     '''
-    if safelogin(request):
-        username = request.form['username']
-        password = request.form['password']
-        task_db = db()
-        result = task_db.auth_username_password(username,password)
-        if result['status'] == 0:
-            if result['data']:
-                get_authtoken = task_db.select_user_authtoken(username)
-                if get_authtoken['status'] == 0 and get_authtoken['data']:
-                    rtp = make_response(json.dumps({'status':0,'data':{'username':username,'cookies':get_authtoken['data']['cookies'],'token':get_authtoken['data']['token']}}))
-                    rtp.headers['Access-Control-Allow-Origin'] = '*'
-                    return rtp
-                else:
-                    rtp = make_response(json.dumps({'status':-1,'errmsg':'get authtoken failed'}))
-                    rtp.headers['Access-Control-Allow-Origin'] = '*'
-                    return rtp
-            else:
-                rtp = make_response(json.dumps({'status':-1,'errmsg':'error username or password'}))
-                rtp.headers['Access-Control-Allow-Origin'] = '*'
-                return rtp
-        else:
-            rtp = make_response(json.dumps({'status':-1,'errmsg':'select database failed'}))
-            rtp.headers['Access-Control-Allow-Origin'] = '*'
-            return rtp
-    else:
-        rtp = make_response(json.dumps({'status': -1, 'errmsg': 'error input data'}))
-        rtp.headers['Access-Control-Allow-Origin'] = '*'
-        return rtp
+    return json.dumps(request.json)
+    # if safelogin(request):
+    #     username = request.form['username']
+    #     password = request.form['password']
+    #     task_db = db()
+    #     result = task_db.auth_username_password(username,password)
+    #     if result['status'] == 0:
+    #         if result['data']:
+    #             get_authtoken = task_db.select_user_authtoken(username)
+    #             if get_authtoken['status'] == 0 and get_authtoken['data']:
+    #                 rtp = make_response(json.dumps({'status':0,'data':{'username':username,'cookies':get_authtoken['data']['cookies'],'token':get_authtoken['data']['token']}}))
+    #                 rtp.headers['Access-Control-Allow-Origin'] = '*'
+    #                 return rtp
+    #             else:
+    #                 rtp = make_response(json.dumps({'status':-1,'errmsg':'get authtoken failed'}))
+    #                 rtp.headers['Access-Control-Allow-Origin'] = '*'
+    #                 return rtp
+    #         else:
+    #             rtp = make_response(json.dumps({'status':-1,'errmsg':'error username or password'}))
+    #             rtp.headers['Access-Control-Allow-Origin'] = '*'
+    #             return rtp
+    #     else:
+    #         rtp = make_response(json.dumps({'status':-1,'errmsg':'select database failed'}))
+    #         rtp.headers['Access-Control-Allow-Origin'] = '*'
+    #         return rtp
+    # else:
+    #     rtp = make_response(json.dumps({'status': -1, 'errmsg': 'error input data'}))
+    #     rtp.headers['Access-Control-Allow-Origin'] = '*'
+    #     return rtp
 
 
 @app.route('/api/user',methods=['GET'])

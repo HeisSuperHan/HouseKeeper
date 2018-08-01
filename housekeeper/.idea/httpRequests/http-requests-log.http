@@ -1,3 +1,43 @@
+POST http://127.0.0.1:5000/api/login?username=test1@qq.com&password=test1password&repeate=test1password
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-08-01T104356.200.html
+
+###
+
+POST http://127.0.0.1:5000/api/register?username=test1@qq.com&password=test1password&repeate=test1password
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-08-01T104345.200.html
+
+###
+
+POST http://127.0.0.1:5000/api/register?username=test1@qq.com&password=test1password&repeate=test1password
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-08-01T102017.200.html
+
+###
+
+POST http://127.0.0.1:5000/api/register?username=test1@qq.com&password=test1password&repeate=test312312
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-08-01T101843.200.html
+
+###
+
+POST http://127.0.0.1:5000/api/login?username=test1@qq.com&password=test1password
+Accept: */*
+Cache-Control: no-cache
+
+<> 2018-08-01T101519.200.html
+
+###
+
 POST http://127.0.0.1:8000/login?username=test1@qq.com&password=test1password
 Accept: */*
 Cache-Control: no-cache
@@ -277,47 +317,6 @@ Accept: */*
 Cache-Control: no-cache
 
 <> 2018-07-30T025426.200.html
-
-###
-
-POST http://localhost:5000/login
-Accept: */*
-Cache-Control: no-cache
-
-<> 2018-07-30T025405.400.html
-
-###
-
-GET http://localhost:5000/user
-Accept: */*
-Cache-Control: no-cache
-
-<> 2018-07-27T103542.500.html
-
-###
-
-GET http://localhost:5000/user?username=admin1@qq.com&password=admin1
-Accept: */*
-Cache-Control: no-cache
-
-<> 2018-07-27T103453.500.html
-
-###
-
-GET http://localhost:5000/user
-Accept: */*
-Cache-Control: no-cache
-
-<> 2018-07-27T103355.500.html
-
-###
-
-GET http://localhost:5000/user
-Accept: */*
-Cache-Control: no-cache
-Cookies: user_cookies=2ceec761e05b7b31d4de0ea60b376f7d
-
-<> 2018-07-27T102800.500.html
 
 ###
 
