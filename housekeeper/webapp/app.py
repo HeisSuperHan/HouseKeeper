@@ -1,5 +1,6 @@
 
 from flask import Flask,request,make_response,render_template
+from flask_cors import CORS
 from safe.login_reg_detect import safelogin,saferegister
 from authtoken.auth import auth
 from db_manger import db
@@ -9,7 +10,7 @@ import uuid
 import time
 
 app = Flask(__name__)
-
+CORS(app)
 
 @app.route('/')
 def index():
@@ -125,9 +126,9 @@ def miner():
                         before_status[x] = now_miner_status[x]
                     result = task_db.update_miner_status(str(miner_id),json.dumps(before_status))
                     if result['status'] == 0:
-                        return json.dumps({'status':0,'data':'insert finished'})
+                        return json.dumps({'status':0,'data':'update finished'})
                     else:
-                        return json.dumps({'status': -1, 'errmsg': 'db update miner status failed'})
+                        return json.dumps({'status': -1, 'errmsg': 'db update miner status failed','db:':result})
                 else:                            # 矿机id不存在，新矿机，插入第一次矿机数据
                     result = task_db.insert_miner_data(str(miner_id), str(owner), json.dumps(now_miner_status))
                     if result['status'] == 0:
@@ -158,18 +159,26 @@ def admin_login():
                 if get_authtoken['status'] == 0 and get_authtoken['data']:
                     rtp = make_response(json.dumps({'status': 0,'data': {'username': username, 'cookies': get_authtoken['data']['cookies'],'token': get_authtoken['data']['token']}}))
                     rtp.headers['Access-Control-Allow-Origin'] = '*'
+                    rtp.headers['Access-Control-Allow-Methods'] = 'OPTIONS,HEAD,GET,POST'
+                    rtp.headers['Access-Control-Allow-Headers'] = 'x-requested-with'
                     return rtp
                 else:
                     rtp = make_response(json.dumps({'status': -1, 'errmsg': 'get authtoken failed'}))
                     rtp.headers['Access-Control-Allow-Origin'] = '*'
+                    rtp.headers['Access-Control-Allow-Methods'] = 'OPTIONS,HEAD,GET,POST'
+                    rtp.headers['Access-Control-Allow-Headers'] = 'x-requested-with'
                     return rtp
         else:
             rtp = make_response(json.dumps({'status':-1,'errmsg':'select database failed'}))
             rtp.headers['Access-Control-Allow-Origin'] = '*'
+            rtp.headers['Access-Control-Allow-Methods'] = 'OPTIONS,HEAD,GET,POST'
+            rtp.headers['Access-Control-Allow-Headers'] = 'x-requested-with'
             return rtp
     else:
         rtp = make_response(json.dumps({'status': -1, 'errmsg': 'error input data'}))
         rtp.headers['Access-Control-Allow-Origin'] = '*'
+        rtp.headers['Access-Control-Allow-Methods'] = 'OPTIONS,HEAD,GET,POST'
+        rtp.headers['Access-Control-Allow-Headers'] = 'x-requested-with'
         return rtp
 
 

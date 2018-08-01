@@ -85,16 +85,19 @@ class db(object):
         根据用户名查询这名用户下有哪些矿机数据
         '''
         sql = 'select * from miners where owner=?'
+        a = self.cursor.execute(sql, (username,))
+        b = a.fetchall()
+        miners_number = len(b)   # 矿机数量
+        data = {}
         try:
-            a = self.cursor.execute(sql, (username,))
-            b = a.fetchall()
-            miners_number = len(b)   # 矿机数量
             if b:
-                return {'status': 0, 'data': b,'miners_number':miners_number}
+                for x in b:
+                    data[x[0]] = json.loads(x[2])
+                return {'status': 0, 'data': data,'miners_number':miners_number}
             else:
                 return {'status': -1}
         except Exception as e:
-            logger('database - select username from cookies', str(e))
+            logger('database - select miners from username', str(e))
             return {'status': -1, 'errmsg': str(e)}
 
 
@@ -152,9 +155,9 @@ class db(object):
         '''
         根据矿机Miner_id更新添加矿机状态数据
         '''
-        sql = 'update miners set status=? where miner_id=?'
+        sql = 'update miners set miner_data=? where miner_id=?'
         try:
-            self.cursor.execute(sql,(miner_id,status))
+            self.cursor.execute(sql,(status,miner_id))
             self.conn.commit()
             self.close_db()
         except Exception as e:
