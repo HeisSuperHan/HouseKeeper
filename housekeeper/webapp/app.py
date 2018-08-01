@@ -118,21 +118,22 @@ def miner():
     if user_exist['status'] == 0:
         if user_exist['data']:          # 有这个用户
             try:
-                before_status = task_db.check_minerid_exist(miner_id)     # 检查是否有这个矿机id
-                if before_status['data']:        # 矿机已存在  更新矿机状态即可
+                miner_exist = task_db.check_minerid_exist(miner_id)     # 检查是否有这个矿机id
+                if miner_exist['data']:        # 矿机已存在  更新矿机状态即可
+                    before_status = task_db.select_status_from_miner_id(str(miner_id))['data']
                     for x in now_miner_status:
                         before_status[x] = now_miner_status[x]
-                    result = task_db.update_miner_status(miner_id,before_status)
+                    result = task_db.update_miner_status(str(miner_id),json.dumps(before_status))
                     if result['status'] == 0:
                         return json.dumps({'status':0,'data':'insert finished'})
                     else:
-                        return json.dumps({'status': -1, 'errmsg': 'db insert miner failed'})
+                        return json.dumps({'status': -1, 'errmsg': 'db update miner status failed'})
                 else:                            # 矿机id不存在，新矿机，插入第一次矿机数据
-                    result = task_db.insert_miner_data(miner_id, owner, now_miner_status)
+                    result = task_db.insert_miner_data(str(miner_id), str(owner), json.dumps(now_miner_status))
                     if result['status'] == 0:
                         return json.dumps({'status': 0, 'data': 'insert finished'})
                     else:
-                        return json.dumps({'status': -1, 'errmsg': 'db insert miner failed'})
+                        return json.dumps({'status': -1, 'errmsg': 'db insert miner status failed','db:':result})
             except Exception as e:
                 logger('json miner data', str(e))
                 return json.dumps({'status': -1, 'errmsg': str(e)})

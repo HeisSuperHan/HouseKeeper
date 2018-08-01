@@ -85,10 +85,10 @@ def main():
                 if task_send_data['status'] == 0:
                     time.sleep(10)
                 else:
-                    logger('error',task_send_data)
+                    logger('send data failed',task_send_data)
                     time.sleep(10)
             else:
-                logger('error',task_get_data)
+                logger('get data failed',task_get_data)
                 time.sleep(10)
     else:
         # 判断为未登记用户后要求输入邮箱号，并生成登记信息
