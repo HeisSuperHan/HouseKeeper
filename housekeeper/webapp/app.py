@@ -158,27 +158,27 @@ def admin_login():
                 get_authtoken = task_db.select_admin_authtoken(username)
                 if get_authtoken['status'] == 0 and get_authtoken['data']:
                     rtp = make_response(json.dumps({'status': 0,'data': {'username': username, 'cookies': get_authtoken['data']['cookies'],'token': get_authtoken['data']['token']}}))
-                    rtp.headers['Access-Control-Allow-Origin'] = '*'
-                    rtp.headers['Access-Control-Allow-Methods'] = 'OPTIONS,HEAD,GET,POST'
-                    rtp.headers['Access-Control-Allow-Headers'] = 'x-requested-with'
+                    # rtp.headers['Access-Control-Allow-Origin'] = '*'
+                    # rtp.headers['Access-Control-Allow-Methods'] = 'OPTIONS,HEAD,GET,POST'
+                    # rtp.headers['Access-Control-Allow-Headers'] = 'x-requested-with'
                     return rtp
                 else:
                     rtp = make_response(json.dumps({'status': -1, 'errmsg': 'get authtoken failed'}))
-                    rtp.headers['Access-Control-Allow-Origin'] = '*'
-                    rtp.headers['Access-Control-Allow-Methods'] = 'OPTIONS,HEAD,GET,POST'
-                    rtp.headers['Access-Control-Allow-Headers'] = 'x-requested-with'
+                    # rtp.headers['Access-Control-Allow-Origin'] = '*'
+                    # rtp.headers['Access-Control-Allow-Methods'] = 'OPTIONS,HEAD,GET,POST'
+                    # rtp.headers['Access-Control-Allow-Headers'] = 'x-requested-with'
                     return rtp
         else:
             rtp = make_response(json.dumps({'status':-1,'errmsg':'select database failed'}))
-            rtp.headers['Access-Control-Allow-Origin'] = '*'
-            rtp.headers['Access-Control-Allow-Methods'] = 'OPTIONS,HEAD,GET,POST'
-            rtp.headers['Access-Control-Allow-Headers'] = 'x-requested-with'
+            # rtp.headers['Access-Control-Allow-Origin'] = '*'
+            # rtp.headers['Access-Control-Allow-Methods'] = 'OPTIONS,HEAD,GET,POST'
+            # rtp.headers['Access-Control-Allow-Headers'] = 'x-requested-with'
             return rtp
     else:
         rtp = make_response(json.dumps({'status': -1, 'errmsg': 'error input data'}))
-        rtp.headers['Access-Control-Allow-Origin'] = '*'
-        rtp.headers['Access-Control-Allow-Methods'] = 'OPTIONS,HEAD,GET,POST'
-        rtp.headers['Access-Control-Allow-Headers'] = 'x-requested-with'
+        # rtp.headers['Access-Control-Allow-Origin'] = '*'
+        # rtp.headers['Access-Control-Allow-Methods'] = 'OPTIONS,HEAD,GET,POST'
+        # rtp.headers['Access-Control-Allow-Headers'] = 'x-requested-with'
         return rtp
 
 
