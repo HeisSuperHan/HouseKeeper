@@ -13,16 +13,29 @@ def get_data():
         r = requests.get('http://127.0.0.1:3333',timeout=10)
         re_data = re.search(pth, r.text).group()
         data = json.loads(re_data)
-        return {'status':0,'data':data}
+        now_time = int(time.time())
+        # 币种
+        coin = data['result'][0]
+        # 总算力
+        all_speed = data['result'][2]
+        # 各卡算力
+        detail_speed = data['result'][3]
+        # 温度转速
+        temp_zs = data['result'][6]
+        # 矿池
+        pool = data['result'][7]
+        data_1 = {now_time:[coin,all_speed,detail_speed,temp_zs,pool]}
+        return {'status':0,'data':data_1}
     except Exception as e:
         return {'status':-1,'errmsg':str(e)}
 
 
-def send_data(data,username,miner_info):
-    url = 'http://118.24.115.49:8000/miner'
-    playload = {'data':data,'username':username,'miner_info':miner_info}
+def send_data(data):
+    url = 'http://118.24.115.49:8888/api/miner'
+    headers = {'Content-Type': 'application/json'}
+    playload = json.dumps({'data':data})
     try:
-        r = requests.get(url,data=playload,timeout=10)
+        r = requests.post(url,headers=headers,data=playload,timeout=10)
         if r.status_code == 200:
             return {'status':0}
         else:
@@ -59,11 +72,13 @@ def main():
     check_user = auth_user()
     if check_user['status'] == 0:
         print('小白秘书已启动，运行中...')
-        user_data = check_user['data']
+        miner_id = check_user['data']['miner_id']
+        owner = check_user['data']['username']
         while True:
             task_get_data = get_data()
             if task_get_data['status'] == 0:
-                task_send_data = send_data(task_get_data['data'],user_data['username'],check_user['data'])
+                need_be_send = {'miner_id':miner_id,'owner':owner,'miner_data':task_get_data['data']}
+                task_send_data = send_data(need_be_send)
                 if task_send_data['status'] == 0:
                     time.sleep(10)
                 else:

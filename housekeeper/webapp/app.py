@@ -109,26 +109,38 @@ def user():
 
 @app.route('/api/miner',methods=['POST'])
 def miner():
-    username = request.form['username']
-    miner_data = request.form['data']
-    miner_info = request.form['user_info']
+    miner_data = json.loads(request.get_data())
+    owner = miner_data['owner']
+    miner_id = miner_data['miner_id']
+    now_miner_status = miner_data['miner_data']
     task_db = db()
-    user_exist = task_db.check_user_miner(username)
+    user_exist = task_db.check_user_miner(owner)
     if user_exist['status'] == 0:
         if user_exist['data']:
             try:
-                miner_id = json.loads(miner_info)['miner_id']
-                owner = username
-                miner_data = {'data':json.loads(miner_data),'info':json.loads(miner_info)}
-                result = task_db.insert_miner_data(miner_id,owner,miner_data)
-                if result['status'] == 0:
-                    rtp = make_response(json.dumps({'status':0,'data':'insert finished'}))
-                    rtp.headers['Access-Control-Allow-Origin'] = '*'
-                    return rtp
+                before_status = task_db.check_minerid_exist(miner_id)
+                if before_status['data']:
+                    for x in now_miner_status:
+                        before_status[x] = now_miner_status[x]
+                    result = task_db.update_miner_status(miner_id,before_status)
+                    if result['status'] == 0:
+                        rtp = make_response(json.dumps({'status':0,'data':'insert finished'}))
+                        rtp.headers['Access-Control-Allow-Origin'] = '*'
+                        return rtp
+                    else:
+                        rtp = make_response(json.dumps({'status': -1, 'errmsg': 'db insert miner failed'}))
+                        rtp.headers['Access-Control-Allow-Origin'] = '*'
+                        return rtp
                 else:
-                    rtp = make_response(json.dumps({'status': -1, 'errmsg': 'db insert miner failed'}))
-                    rtp.headers['Access-Control-Allow-Origin'] = '*'
-                    return rtp
+                    result = task_db.insert_miner_data(miner_id, owner, miner_data)
+                    if result['status'] == 0:
+                        rtp = make_response(json.dumps({'status': 0, 'data': 'insert finished'}))
+                        rtp.headers['Access-Control-Allow-Origin'] = '*'
+                        return rtp
+                    else:
+                        rtp = make_response(json.dumps({'status': -1, 'errmsg': 'db insert miner failed'}))
+                        rtp.headers['Access-Control-Allow-Origin'] = '*'
+                        return rtp
             except Exception as e:
                 logger('json miner data', str(e))
                 rtp = make_response(json.dumps({'status': -1, 'errmsg': str(e)}))
@@ -177,29 +189,34 @@ def admin_login():
 
 @app.route('/api/admin',methods=['POST'])
 def admin():
+    cookies = request.cookies['admin_cookies']
     task_db = db()
-    result_1 = task_db.select_users_miners()
-    if result_1['status'] == 0:
-        users_number = result_1['data']['users']
-        miners_number = result_1['data']['miners']
-        result_2 = task_db.select_all_miner_info()
-        if result_2['status'] == 0:
-            result_3 = {}
-            for x in result_2['data']:
-                result_3[x[1]] = []
-            for y in result_2['data']:
-                result_3[y[1]].append({y[0]:y[2]})
-            rtp = make_response(json.dumps({'status':0,'user_number':users_number,'miners_number':miners_number,'data':result_3}))
-            rtp.headers['Access-Control-Allow-Origin'] = '*'
-            return rtp
+    a = task_db.auth_admin_cookies(cookies)
+    if a['status'] == 0 and a['data']:
+        result_1 = task_db.select_users_miners()
+        if result_1['status'] == 0:
+            users_number = result_1['data']['users']
+            miners_number = result_1['data']['miners']
+            result_2 = task_db.select_all_miner_info()
+            if result_2['status'] == 0:
+                result_3 = {}
+                for x in result_2['data']:
+                    result_3[x[1]] = []
+                for y in result_2['data']:
+                    result_3[y[1]].append({y[0]:y[2]})
+                rtp = make_response(json.dumps({'status':0,'user_number':users_number,'miners_number':miners_number,'data':result_3}))
+                rtp.headers['Access-Control-Allow-Origin'] = '*'
+                return rtp
+            else:
+                rtp = make_response(json.dumps({'status': -1, 'errmsg': 'error db result 2'}))
+                rtp.headers['Access-Control-Allow-Origin'] = '*'
+                return rtp
         else:
-            rtp = make_response(json.dumps({'status': -1, 'errmsg': 'error db result 2'}))
+            rtp = make_response(json.dumps({'status': -1, 'errmsg': 'error db result 1'}))
             rtp.headers['Access-Control-Allow-Origin'] = '*'
             return rtp
     else:
-        rtp = make_response(json.dumps({'status': -1, 'errmsg': 'error db result 1'}))
-        rtp.headers['Access-Control-Allow-Origin'] = '*'
-        return rtp
+        return json.dumps({'status':-1,'errmsg':'erroe cookies'})
 
 
 

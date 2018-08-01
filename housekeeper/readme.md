@@ -28,6 +28,21 @@ jiaqinetwork
 '''
 
 
+'''
+client 返回给服务器的json结构
+{
+    'miner_id' : 'xxxx',
+    'owner' : 'xxx@qq.com',
+    'miner_data':{
+        'time':['ETH','算力'，'温度风速','矿池']
+    }
+}
+'''
+
+
+
+
+
 
 
 '''

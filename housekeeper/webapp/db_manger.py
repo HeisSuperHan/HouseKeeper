@@ -1,6 +1,7 @@
 
 
 import sqlite3
+import json
 from logger.logger import logger
 
 class db(object):
@@ -100,6 +101,24 @@ class db(object):
             logger('database - check user miner', str(e))
             return {'status': -1, 'errmsg': str(e)}
 
+    def check_minerid_exist(self,miner_id):
+        '''
+        查询数据库中是否有这个矿机id，有则可以更新，没有则插入
+        '''
+        sql = 'select * from miners where miner_id=?'
+        try:
+            a = self.cursor.execute(sql,(miner_id,))
+            user_exist = a.fetchall()
+            if user_exist:
+                return {'status':0,'data':True}
+            else:
+                return {'status':0,'data':False}
+        except Exception as e:
+            logger('database - check_minerid_exist', str(e))
+            return {'status': -1, 'errmsg': str(e)}
+
+
+
     def insert_miner_data(self,miner_id,owner,miner_data):
         sql = 'insert into miners values(?,?,?)'
         try:
@@ -110,6 +129,28 @@ class db(object):
         except Exception as e:
             logger('database - insert user',str(e))
             return {'status':-1,'errmsg':str(e)}
+
+    def update_miner_status(self,miner_id,status):
+        sql = 'update miners set status=? where miner_id=?'
+        try:
+            self.cursor.execute(sql,(miner_id,status))
+            self.conn.commit()
+            self.close_db()
+        except Exception as e:
+            logger('database - update_miner_status', str(e))
+            return {'status': -1, 'errmsg': str(e)}
+
+    def select_status_from_miner_id(self,miner_id):
+        sql = 'select miner_data from miners where miner_id=?'
+        try:
+            a = self.cursor.execute(sql,(miner_id,))
+            b = a.fetchall()
+            c = b[0][0]
+            return {'status':0,'data':json.loads(c)}
+        except Exception as e:
+            logger('database - select_miner_status_from_miner_id', str(e))
+            return {'status': -1, 'errmsg': str(e)}
+
 
     # admin
     def auth_admin(self,username,password):
@@ -140,6 +181,19 @@ class db(object):
             logger('database - get authtoken', str(e))
             return {'status': -1, 'errmsg': str(e)}
 
+
+    def auth_admin_cookies(self,cookies):
+        try:
+            sql = 'select * from admin where cookies=?'
+            a = self.cursor.execute(sql,(cookies,))
+            b = a.fetchall()
+            if b:
+                return {'status': 0, 'data': True}
+            else:
+                return {'status': 0, 'data': False}
+        except Exception as e:
+            logger('database - auth_admin_cookies', str(e))
+            return {'status': -1, 'errmsg': str(e)}
 
 
     def select_users_miners(self):
