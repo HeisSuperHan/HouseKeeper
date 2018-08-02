@@ -8,6 +8,7 @@ from logger.logger import logger
 import json
 import uuid
 import time
+import sqlite3
 
 app = Flask(__name__)
 CORS(app)
@@ -121,6 +122,31 @@ def miner():
     else:
         return json.dumps({'status': -1, 'errmsg': 'db error'})
 
+
+
+
+@app.route('/api/miner/speed/<miner_id>',methods=['GET'])
+def miner_speed(miner_id):
+    '''
+    根据矿机id，返回前端算力曲线
+    '''
+    conn = sqlite3.connect('user.db')
+    cursor = conn.cursor()
+    sql = 'select miner_data from miners where miner_id=?'
+    a = cursor.execute(sql,(miner_id,))
+    b = a.fetchall()
+    b = json.loads(b[0][0])
+    time_list = []
+    for x in b:
+        time_list.append(int(x))
+    #排序从小到达
+    time_list.sort()
+    speed_list = []
+    for y in time_list:
+        y_1 = y
+        y_2 = int(b[str(y)][1].split(';')[0])
+        speed_list.append([y_1,y_2])
+    return json.dumps(speed_list)
 
 
 
