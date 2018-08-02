@@ -3,9 +3,9 @@ def saferegister(req):
     not_safe = ['/', '\\', '*', '#', '$', '^', ')', '(', '+', '-', '%', '!', '~', '?', '[', ']', '{', '}', '<', '>',
                 '=']
     email_need = ['@', '.']
-    email = req.form['username']
-    password = req.form['password']
-    repeate = req.form['repeate']
+    email = req.json['username']
+    password = req.json['password']
+    repeate = req.json['repeate']
     if password == repeate:
         if email_need[0] in email:
             if email_need[1] in email:
@@ -28,8 +28,8 @@ def safelogin(req):
     not_safe = ['/', '\\', '*', '#', '$', '^', ')', '(', '+', '-', '%', '!', '~', '?', '[', ']', '{', '}', '<', '>',
                 '=']
     email_need = ['@', '.']
-    email = req.form['username']
-    password = req.form['password']
+    email = req.json['username']
+    password = req.json['password']
     if email_need[0] in email:
         if email_need[1] in email:
             for x in not_safe:
