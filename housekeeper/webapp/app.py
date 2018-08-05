@@ -67,12 +67,12 @@ def login():
         return json.dumps({'status': -1, 'errmsg': 'error input data'})
 
 
-@app.route('/api/user',methods=['GET'])
-def user():
+@app.route('/api/user/<cookies_value>',methods=['GET'])
+def user(cookies_value):
     '''
     用户登陆完毕后，api会请求相关信息,矿机数据
     '''
-    cookies = request.cookies['user_cookies']
+    cookies = cookies_value
     task_db = db()
     result_1 = task_db.select_username_from_cookies(cookies)
     if result_1['status'] == 0:
@@ -125,29 +125,21 @@ def miner():
 
 
 
-@app.route('/api/miner/speed/<miner_id>',methods=['GET'])
+@app.route('/api/miner/info/<miner_id>',methods=['GET'])
 def miner_speed(miner_id):
     '''
     根据矿机id，返回前端算力曲线
     '''
-    conn = sqlite3.connect('user.db')
+    conn = sqlite3.connect('../database/user.db')
     cursor = conn.cursor()
     sql = 'select miner_data from miners where miner_id=?'
-    a = cursor.execute(sql,(miner_id,))
-    b = a.fetchall()
-    b = json.loads(b[0][0])
-    time_list = []
+    a = cursor.execute(sql,(str(miner_id),))
+    b_1 = a.fetchall()
+    b = json.loads(b_1[0][0])
+    data_list = {'data':{}}
     for x in b:
-        time_list.append(int(x))
-    #排序从小到达
-    time_list.sort()
-    speed_list = []
-    for y in time_list:
-        y_1 = y
-        y_2 = int(b[str(y)][1].split(';')[0])
-        speed_list.append([y_1,y_2])
-    return json.dumps(speed_list)
-
+        data_list['data'][x] = {'Temperature':b[x][3].split(';')[::2],'Calculate_force':b[x][2].split(';'),'Speed':b[x][3].split(';')[1::2]}
+    return json.dumps(data_list)
 
 
 @app.route('/api/admin/login',methods=['POST'])
@@ -171,9 +163,9 @@ def admin_login():
 
 
 
-@app.route('/api/admin',methods=['GET'])
-def admin():
-    cookies = request.cookies['admin_cookies']
+@app.route('/api/admin/<cookies_value>',methods=['GET'])
+def admin(cookies_value):
+    cookies = cookies_value
     task_db = db()
     a = task_db.auth_admin_cookies(cookies)
     if a['status'] == 0 and a['data']:
@@ -203,4 +195,4 @@ def admin():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0',port=8888)
