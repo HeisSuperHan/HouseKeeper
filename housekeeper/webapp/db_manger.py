@@ -92,7 +92,10 @@ class db(object):
         try:
             if b:
                 for x in b:
-                    data[x[0]] = json.loads(x[2])
+                    c = json.loads(x[2])
+                    for z in c:
+                        c[z].append(x[0])
+                    data[x[0]] = c
                 return {'status': 0, 'data': data,'miners_number':miners_number}
             else:
                 return {'status': -1}

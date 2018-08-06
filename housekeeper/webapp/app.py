@@ -128,18 +128,21 @@ def miner():
 @app.route('/api/miner/info/<miner_id>',methods=['GET'])
 def miner_speed(miner_id):
     '''
-    根据矿机id，返回前端算力曲线
+    根据矿机id，返回前端算力,温度，转速
     '''
-    conn = sqlite3.connect('../database/user.db')
-    cursor = conn.cursor()
-    sql = 'select miner_data from miners where miner_id=?'
-    a = cursor.execute(sql,(str(miner_id),))
-    b_1 = a.fetchall()
-    b = json.loads(b_1[0][0])
-    data_list = {'data':{}}
-    for x in b:
-        data_list['data'][x] = {'Temperature':b[x][3].split(';')[::2],'Calculate_force':b[x][2].split(';'),'Speed':b[x][3].split(';')[1::2]}
-    return json.dumps(data_list)
+    try:
+        conn = sqlite3.connect('../database/user.db')
+        cursor = conn.cursor()
+        sql = 'select miner_data from miners where miner_id=?'
+        a = cursor.execute(sql,(str(miner_id),))
+        b_1 = a.fetchall()
+        b = json.loads(b_1[0][0])
+        data_list = {'data':{},'status':'success'}
+        for x in b:
+            data_list['data'][x] = {'Temperature':b[x][3].split(';')[::2],'Calculate_force':b[x][2].split(';'),'Speed':b[x][3].split(';')[1::2]}
+        return json.dumps(data_list)
+    except:
+        return json.dumps({'status':'failed'})
 
 
 @app.route('/api/admin/login',methods=['POST'])
