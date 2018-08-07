@@ -192,6 +192,9 @@ def admin(cookies_value):
         return json.dumps({'status':-1,'errmsg':'erroe cookies'})
 
 
+@app.route('/api/client/download',methods=['GET'])
+def download():
+    return app.send_static_file('timg.zip')
 
 
 
