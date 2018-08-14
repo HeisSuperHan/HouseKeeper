@@ -68,7 +68,7 @@ class db(object):
         '''
         根据cookies，查找用户名，判别用户
         '''
-        sql = 'select username from account where cookies=?'
+        sql = 'select username from account where token=?'
         try:
             a = self.cursor.execute(sql,(cookies,))
             b = a.fetchall()[0][0]

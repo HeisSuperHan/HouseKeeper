@@ -56,7 +56,8 @@ def login():
             if result['data']:
                 get_authtoken = task_db.select_user_authtoken(username)
                 if get_authtoken['status'] == 0 and get_authtoken['data']:
-                    return json.dumps({'status':0,'data':{'username':username,'cookies':get_authtoken['data']['cookies'],'token':get_authtoken['data']['token']}})
+                    # return json.dumps({'status':0,'data':{'username':username,'cookies':get_authtoken['data']['cookies'],'token':get_authtoken['data']['token']}})
+                    return json.dumps({'status': 0,'data': {'userinfo':{'userName': username}, 'token': get_authtoken['data']['token']}})
                 else:
                     return json.dumps({'status':-1,'errmsg':'get authtoken failed'})
             else:
@@ -130,19 +131,47 @@ def miner_speed(miner_id):
     '''
     根据矿机id，返回前端算力,温度，转速
     '''
-    try:
-        conn = sqlite3.connect('../database/user.db')
-        cursor = conn.cursor()
-        sql = 'select miner_data from miners where miner_id=?'
-        a = cursor.execute(sql,(str(miner_id),))
-        b_1 = a.fetchall()
-        b = json.loads(b_1[0][0])
-        data_list = {'data':{},'status':'success'}
-        for x in b:
-            data_list['data'][x] = {'Temperature':b[x][3].split(';')[::2],'Calculate_force':b[x][2].split(';'),'Speed':b[x][3].split(';')[1::2]}
-        return json.dumps(data_list)
-    except:
-        return json.dumps({'status':'failed'})
+    # try:
+    conn = sqlite3.connect('../database/user.db')
+    cursor = conn.cursor()
+    sql = 'select miner_data from miners where miner_id=?'
+    a = cursor.execute(sql,(str(miner_id),))
+    b_1 = a.fetchall()
+    b = json.loads(b_1[0][0])
+    # data_list = {'data':{},'status':'success'}
+    # for x in b:
+    #     data_list['data'][x] = {'Temperature':b[x][3].split(';')[::2],'Calculate_force':b[x][2].split(';'),'Speed':b[x][3].split(';')[1::2]}
+    # return json.dumps(data_list)
+    result_data = {miner_id:{'info':{'state':'good','type':''},'hashRate':{'unit':'Mhash/s','now':'','history':[]},'gpu':{}}}
+    for x in b:
+        result_data[miner_id]['info']['type'] = b[x][0]
+        break
+    # 计算当前最新算力
+    hash_time_list = []
+    for y in b:
+        hash_time_list.append(y)
+    hash_time_list = sorted(hash_time_list) # 完成从小到大排序
+    last_time = hash_time_list[-1]
+    result_data[miner_id]['hashRate']['now'] = b[last_time][1].split(';')[0]
+    for z in b:
+        result_data[miner_id]['hashRate']['history'].append({z:b[z][1].split(';')[0]})
+    # gpu数量
+    gpu_count = len(b[last_time][2].split(';'))
+    for xx in range(gpu_count):
+        result_data[miner_id]['gpu']['gpu'+str(xx)] = {'state':'good','hashRate':{'now':'','history':[]},'speed':{'now':'','history':[]},'temperature':{'now':'','history':[]}}
+        result_data[miner_id]['gpu']['gpu'+str(xx)]['hashRate']['now'] = b[last_time][2].split(';')[xx]
+        # 每张显卡的历史算力
+        for yy in b:
+            result_data[miner_id]['gpu']['gpu'+str(xx)]['hashRate']['history'].append({yy:b[yy][2].split(';')[xx]})
+        # 每张显卡的温度转速以及历史温度转速
+        result_data[miner_id]['gpu']['gpu' + str(xx)]['speed']['now'] = b[last_time][3].split(';')[1::2][xx]
+        result_data[miner_id]['gpu']['gpu' + str(xx)]['temperature']['now'] = b[last_time][3].split(';')[::2][xx]
+        for zz in b:
+            result_data[miner_id]['gpu']['gpu'+str(xx)]['speed']['history'].append({zz:b[zz][3].split(';')[1::2][xx]})
+            result_data[miner_id]['gpu']['gpu' + str(xx)]['temperature']['history'].append({zz: b[zz][3].split(';')[::2][xx]})
+    return json.dumps(result_data)
+    # except:
+    #     return json.dumps({'status':'failed'})
 
 
 @app.route('/api/admin/login',methods=['POST'])
