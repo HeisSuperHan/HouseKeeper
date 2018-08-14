@@ -57,7 +57,7 @@ def login():
                 get_authtoken = task_db.select_user_authtoken(username)
                 if get_authtoken['status'] == 0 and get_authtoken['data']:
                     # return json.dumps({'status':0,'data':{'username':username,'cookies':get_authtoken['data']['cookies'],'token':get_authtoken['data']['token']}})
-                    return json.dumps({'status': 0,'data': {'userinfo':{'userName': username}, 'token': get_authtoken['data']['token']}})
+                    return json.dumps({'status': 0,'userinfo':{'userName': username}, 'token': get_authtoken['data']['token']})
                 else:
                     return json.dumps({'status':-1,'errmsg':'get authtoken failed'})
             else:
@@ -144,7 +144,7 @@ def miner_speed(miner_id):
     # return json.dumps(data_list)
     result_data = {miner_id:{'info':{'state':'good','type':''},'hashRate':{'unit':'Mhash/s','now':'','history':[]},'gpu':{}}}
     for x in b:
-        result_data[miner_id]['info']['type'] = b[x][0]
+        result_data[miner_id]['info']['type'] = b[x][0].split(' - ')[1]
         break
     # 计算当前最新算力
     hash_time_list = []
@@ -160,6 +160,10 @@ def miner_speed(miner_id):
     for xx in range(gpu_count):
         result_data[miner_id]['gpu']['gpu'+str(xx)] = {'state':'good','hashRate':{'now':'','history':[]},'speed':{'now':'','history':[]},'temperature':{'now':'','history':[]}}
         result_data[miner_id]['gpu']['gpu'+str(xx)]['hashRate']['now'] = b[last_time][2].split(';')[xx]
+        if int(result_data[miner_id]['gpu']['gpu'+str(xx)]['hashRate']['now']) > 0:
+            pass
+        else:
+            result_data[miner_id]['gpu']['gpu'+str(xx)]['state'] = 'broken'
         # 每张显卡的历史算力
         for yy in b:
             result_data[miner_id]['gpu']['gpu'+str(xx)]['hashRate']['history'].append({yy:b[yy][2].split(';')[xx]})
